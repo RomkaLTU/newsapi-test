@@ -23,7 +23,7 @@ class NewsSourcesService
 
         $sources = Http::get("https://newsapi.org/v2/top-headlines/sources?{$requestParams}");
 
-        Cache::add('newssources', $sources->collect()->toArray(), now()->addHour());
+        Cache::add('newssources', $sources->collect()->get('sources'), now()->addHour());
 
         return $sources->collect()->toArray();
     }
