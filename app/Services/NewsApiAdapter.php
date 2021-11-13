@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DTO\NewsApi\NewsProviderItemDTO;
+use App\DTO\NewsApi\SourceListItemDTO;
 use App\Interfaces\NewsSourcesInterface;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
@@ -25,9 +26,14 @@ class NewsApiAdapter implements NewsSourcesInterface
             return Cache::get('newssources');
         }
 
-        $sources = Http::get(self::BASE_URL . "/v2/top-headlines/sources?{$requestParams}");
+        $items = Http::get(self::BASE_URL . "/v2/top-headlines/sources?{$requestParams}");
+        $cachableData = [];
 
-        Cache::add('newssources', $sources->collect()->get('sources'), now()->addHour());
+        foreach ($items->collect()->get('sources') as $item) {
+            $cachableData[] = (new SourceListItemDTO($item))->toArray();
+        }
+
+        Cache::add('newssources', $cachableData, now()->addHour());
 
         return Cache::get('newssources');
     }
@@ -40,14 +46,20 @@ class NewsApiAdapter implements NewsSourcesInterface
             'language' => 'en',
         ]);
 
-        $items = Http::get(self::BASE_URL . "/v2/top-headlines?{$requestParams}");
         $cacheKey = implode('_', $sourceIds) . '_items';
 
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
         }
 
-        Cache::add($cacheKey, Arr::get($items->collect()->toArray(), 'articles'), now()->addHour());
+        $items = Http::get(self::BASE_URL . "/v2/top-headlines?{$requestParams}");
+        $cachableData = [];
+
+        foreach ($items->collect()->get('articles') as $item) {
+            $cachableData[] = (new NewsProviderItemDTO($item))->toArray();
+        }
+
+        Cache::add($cacheKey, $cachableData, now()->addHour());
 
         return Cache::get($cacheKey);
     }

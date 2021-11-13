@@ -1,7 +1,7 @@
 <template>
     <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <li v-for="source in sources" :key="source.name" class="col-span-1 shadow-sm rounded-md">
-            <a :href="route('sources.newslist', source.id)" class="flex">
+            <inertia-link :href="route('sources.newslist', source.id)" class="flex">
                 <div class="flex-shrink-0 flex items-center justify-center bg-gray-200 w-16 text-black text-sm font-semibold rounded-l-md">
                     {{ getInitials(source.name) }}
                 </div>
@@ -16,7 +16,7 @@
                         </button>
                     </div>
                 </div>
-            </a>
+            </inertia-link>
         </li>
     </ul>
 </template>

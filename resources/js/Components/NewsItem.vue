@@ -2,7 +2,7 @@
     <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
         <div class="flex-shrink-0">
             <a :href="post.url" target="_blank">
-                <img class="h-48 w-full object-cover" :src="post.urlToImage" alt="" />
+                <img class="h-48 w-full object-cover" :src="post.imageUrl" alt="" />
             </a>
         </div>
         <div class="flex-1 bg-white p-6 flex flex-col justify-between">
@@ -31,8 +31,8 @@
                         {{ post.author }}
                     </p>
                     <div class="flex space-x-1 text-sm text-gray-500">
-                        <time :datetime="post.publishedAt">
-                            {{ post.publishedAt }}
+                        <time :datetime="post.publishDate">
+                            {{ post.publishDate }}
                         </time>
                     </div>
                 </div>
