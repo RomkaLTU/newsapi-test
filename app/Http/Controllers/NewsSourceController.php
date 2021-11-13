@@ -8,7 +8,7 @@ use App\Interfaces\NewsSourcesInterface;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class NewsSourcesController extends Controller
+class NewsSourceController extends Controller
 {
     public function __construct(
         private NewsSourcesInterface $newsSources,

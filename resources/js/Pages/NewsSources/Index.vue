@@ -24,12 +24,15 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import {Head, usePage} from '@inertiajs/inertia-vue3';
-import Cards from "@/Components/Cards";
+import Cards from "@/Components/NewsSourceCards";
 import { computed } from "vue";
 
 export default {
     props: {
-        sources: Object,
+        sources: {
+            type: Array,
+            default: [],
+        },
     },
 
     components: {
@@ -39,7 +42,7 @@ export default {
     },
 
     setup() {
-        const sources = computed(() => usePage().props.value.sources)
+        const sources = computed(() => usePage().props.value.sources);
 
         return {
             sources,

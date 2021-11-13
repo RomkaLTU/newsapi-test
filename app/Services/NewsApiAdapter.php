@@ -16,26 +16,25 @@ class NewsApiAdapter implements NewsSourcesInterface
 
     public function getSourcesList(): array
     {
-        $requestParams = http_build_query([
-            'category' => 'technology',
-            'apiKey' => config('services.news_api.key'),
-            'language' => 'en',
-        ]);
-
         if (Cache::has('newssources')) {
             return Cache::get('newssources');
         }
 
-        $items = Http::get(self::BASE_URL . "/v2/top-headlines/sources?{$requestParams}");
-        $cachableData = [];
-
-        foreach ($items->collect()->get('sources') as $item) {
-            $cachableData[] = (new SourceListItemDTO($item))->toArray();
-        }
-
-        Cache::add('newssources', $cachableData, now()->addHour());
+        $this->setSourceListCache();
 
         return Cache::get('newssources');
+    }
+
+    public function getFavoriteSources(array $sourceIds): array
+    {
+        if (!Cache::has('newssources')) {
+            $this->setSourceListCache();
+        }
+
+        return array_values(array_filter(
+            Cache::get('newssources'),
+            fn($item) => in_array($item['id'], $sourceIds)
+        ));
     }
 
     public function getSourceItems(array $sourceIds): array
@@ -62,5 +61,23 @@ class NewsApiAdapter implements NewsSourcesInterface
         Cache::add($cacheKey, $cachableData, now()->addHour());
 
         return Cache::get($cacheKey);
+    }
+
+    private function setSourceListCache()
+    {
+        $requestParams = http_build_query([
+            'category' => 'technology',
+            'apiKey' => config('services.news_api.key'),
+            'language' => 'en',
+        ]);
+
+        $items = Http::get(self::BASE_URL . "/v2/top-headlines/sources?{$requestParams}");
+        $cachableData = [];
+
+        foreach ($items->collect()->get('sources') as $item) {
+            $cachableData[] = (new SourceListItemDTO($item))->toArray();
+        }
+
+        Cache::add('newssources', $cachableData, now()->addHour());
     }
 }
