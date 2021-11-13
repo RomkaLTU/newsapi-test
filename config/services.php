@@ -34,4 +34,6 @@ return [
         'key' => env('NEWS_API_KEY'),
     ],
 
+    'news_privider' => env('NEWS_SERVICE_PROVIDER', 'news-api'),
+
 ];
