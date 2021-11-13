@@ -14,7 +14,7 @@ class UserController extends Controller
     public function updateFavorites(UserFavoriteRequest $request): RedirectResponse
     {
         $user = User::find(auth()->user()->id);
-        $oldFavorites = json_decode($user->favorites) ?? [];
+        $oldFavorites = $user->favorites ? json_decode($user->favorites) : [];
         $message = 'Source added to favorites!';
 
         $favorites = Arr::prepend($oldFavorites, $request->get('id'));

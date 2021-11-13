@@ -8,7 +8,7 @@ interface NewsSourcesInterface
 {
     public function getSourcesList(): array;
 
-    public function getSourceItems(array $sourceIds): array;
+    public function getSourceItems(?array $sourceIds): array;
 
-    public function getFavoriteSources(array $sourceIds): array;
+    public function getFavoriteSources(?array $sourceIds): array;
 }

@@ -16,7 +16,8 @@ class DashboardController extends Controller
 
     public function index(): Response
     {
-        $userFavorites = json_decode(auth()->user()->favorites);
+        $userFavorites = auth()->user()->favorites ?? '';
+        $userFavorites = json_decode($userFavorites);
 
         return Inertia::render('Dashboard', [
             'sources' => $this->newsSources->getFavoriteSources($userFavorites),

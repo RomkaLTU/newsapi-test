@@ -25,8 +25,12 @@ class NewsApiAdapter implements NewsSourcesInterface
         return Cache::get('newssources');
     }
 
-    public function getFavoriteSources(array $sourceIds): array
+    public function getFavoriteSources(?array $sourceIds): array
     {
+        if (!$sourceIds) {
+            return [];
+        }
+
         if (!Cache::has('newssources')) {
             $this->setSourceListCache();
         }
@@ -37,8 +41,12 @@ class NewsApiAdapter implements NewsSourcesInterface
         ));
     }
 
-    public function getSourceItems(array $sourceIds): array
+    public function getSourceItems(?array $sourceIds): array
     {
+        if (!$sourceIds) {
+            return [];
+        }
+
         $requestParams = http_build_query([
             'apiKey' => config('services.news_api.key'),
             'sources' => implode(',', $sourceIds),

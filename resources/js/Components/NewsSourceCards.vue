@@ -13,7 +13,7 @@
                         <button
                             @click.prevent="bookmarkSource(source.id)"
                             type="button"
-                            :class="{'text-red-500': favorites.includes(source.id)}"
+                            :class="{'text-red-500': favorites && favorites.includes(source.id)}"
                             class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full bg-transparent hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <span class="sr-only">Open options</span>
                             <BookmarkIcon class="w-5 h-5" aria-hidden="true" />
